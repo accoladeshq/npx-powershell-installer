@@ -1,6 +1,6 @@
 {
   "name": "@accolades/powershell-installer",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Install powershell on the system",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

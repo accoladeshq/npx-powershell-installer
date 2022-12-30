@@ -1,0 +1,63 @@
+name: Powershell Installer Continuous Integration
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 #avoid shallow clone
+
+      - name: Setup Node JS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Tests
+        run: npm run build
+
+  tests:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            version: ubuntu
+          - os: ubuntu-20.04
+            version: ubuntu
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 #avoid shallow clone
+
+      - name: Setup Node JS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Tests
+        run: npm run test:${{ matrix.version }}
