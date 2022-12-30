@@ -38,9 +38,9 @@ jobs:
       matrix:
         include:
           - os: ubuntu-22.04
-            version: ubuntu
+            distribution: debian
           - os: ubuntu-20.04
-            version: ubuntu
+            distribution: debian
 
     runs-on: ${{ matrix.os }}
 
@@ -60,4 +60,4 @@ jobs:
         run: npm ci
 
       - name: Tests
-        run: npm run test:${{ matrix.version }}
+        run: npm run test:${{ matrix.distribution }}
