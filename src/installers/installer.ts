@@ -1,4 +1,5 @@
 import { DebianPowershellInstaller } from './debian-installer';
+import { WindowsPowershellInstaller } from './windows-installer';
 
 export interface IPowershellInstaller {
   /**
@@ -15,6 +16,7 @@ export class PowershellInstaller implements IPowershellInstaller {
   constructor() {
     this._installers = [];
     this._installers.push(new DebianPowershellInstaller());
+    this._installers.push(new WindowsPowershellInstaller());
   }
 
   public canHandle(): boolean {

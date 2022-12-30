@@ -41,6 +41,8 @@ jobs:
             distribution: debian
           - os: ubuntu-20.04
             distribution: debian
+          - os: windows-latest
+            distribution: windows
 
     runs-on: ${{ matrix.os }}
     needs: build
