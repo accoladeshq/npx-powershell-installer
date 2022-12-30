@@ -16,18 +16,18 @@ export class WindowsPowershellInstaller implements IPowershellInstaller {
       child_process.execSync('where pwsh');
       return;
     } catch (error) {
-      console.log('bim')
+    //   console.log('bim')
     }
 
     const keyFilePath = fs.createWriteStream('PowerShell-7.3.0-win-x64.msi');
 
-    console.log('bam')
+    // console.log('bam')
     await new Promise((resolve,) => {
       request(
         `https://github.com/PowerShell/PowerShell/releases/download/v7.3.0/PowerShell-7.3.0-win-x64.msi`, { followRedirect: true }).pipe(keyFilePath).on('close', () => resolve(null));
     });
 
-    console.log('outch')
+    // console.log('outch')
 
     child_process.execSync('msiexec /i "PowerShell-7.3.0-win-x64.msi" /qn')
 
