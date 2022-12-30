@@ -7,6 +7,12 @@ import * as logger from 'pino';
 import { IPowershellInstaller } from './installer';
 
 export class DebianPowershellInstaller implements IPowershellInstaller {
+  private readonly _supportedDistributions: string[];
+
+  constructor() {
+    this._supportedDistributions = ['Debian', 'Ubuntu'];
+  }
+
   public canHandle(): boolean {
     try {
       if (os.type() !== 'Linux') {
@@ -16,7 +22,7 @@ export class DebianPowershellInstaller implements IPowershellInstaller {
 
       const distributionName = this.getDistributionName();
 
-      if (distributionName === 'Debian') {
+      if (this._supportedDistributions.includes(distributionName)) {
         logger.default().info(`[DebianInstaller]: Found distribution ${distributionName}, handling installation`);
         return true;
       }
@@ -71,15 +77,19 @@ export class DebianPowershellInstaller implements IPowershellInstaller {
     child_process.spawnSync('sudo', ['apt-get', 'update']);
     child_process.spawnSync('sudo', ['apt-get', 'install', 'apt-transport-https']);
 
+    const distributionName = this.getDistributionName();
     const release = child_process.execSync('lsb_release -rs');
 
     const keyFilePath = fs.createWriteStream('packages-microsoft-prod.deb');
 
     await new Promise((resolve, _) => {
-      https.get(`https://packages.microsoft.com/config/debian/${release}/packages-microsoft-prod.deb`, (r) => {
-        r.pipe(keyFilePath);
-        resolve(null);
-      });
+      https.get(
+        `https://packages.microsoft.com/config/${distributionName}/${release}/packages-microsoft-prod.deb`,
+        (r) => {
+          r.pipe(keyFilePath);
+          resolve(null);
+        }
+      );
     });
 
     child_process.spawnSync('sudo', ['dpkg', '-i', 'packages-microsoft-prod.deb']);
