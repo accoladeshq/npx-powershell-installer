@@ -39,7 +39,7 @@
   "dependencies": {
     "child_process": "^1.0.2",
     "os": "^0.1.2",
-    "pino": "^8.8.0",
+    "pino": "^8.10.0",
     "request": "^2.88.2"
   }
 }
